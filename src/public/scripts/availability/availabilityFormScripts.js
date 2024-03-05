@@ -1,7 +1,5 @@
 var selectedSlots = [];
 var lastSelection = null;
-var lastSelectionIndex = 0;
-var lastSelectionActivated = false;
 var dayToggledMap = new Map();
 
 function onClickSaveHours (event, element) {
@@ -12,27 +10,67 @@ function onClickSaveHours (event, element) {
 
 function onClickTimeSlot (event, element) {
     const data = JSON.parse(element.dataset.slot);
+    const day = data.day;
     const index = element.dataset.index;
-    const multiSelect = event.shiftKey && lastSelection != null && lastSelection.day == data.day;
+    const alreadySelected = isSlotSelected(day, index);
+
+    const multiSelect = event.shiftKey && lastSelection.day == day;
 
     if(multiSelect) {
-        const min = Math.min(index, lastSelectionIndex);
-        const max = Math.max(index, lastSelectionIndex);
-        multiSelectSlots(data.day, min, max, slotAlreadySelected(lastSelection.day, lastSelectionIndex));
+        const min = Math.min(index, lastSelection.index);
+        const max = Math.max(index, lastSelection.index);
+        toggleMultipleSlots(day, min, max, lastSelection.selected);
+        lastSelection = {
+            day: day,
+            index: index,
+            selected: lastSelection.selected
+        };
     } else {
-        if(!slotAlreadySelected(data.day, index))
-        {
-            selectSlot(element, data, index);
-            lastSelectionActivated = true;
+        if(alreadySelected) {
+            deSelectSlot(element, day, index);
+        } else {
+            selectSlot(element, day, index);
         }
-        else
-        {
-            deSelectSlot(element, data, index);
-            lastSelectionActivated = false;
-        }
-        lastSelection = data;
-        lastSelectionIndex = index;
+        lastSelection = {
+            day: day,
+            index: index,
+            selected: !alreadySelected
+        };
     }
+}
+
+function toggleMultipleSlots (day, from, to, selected) {
+    console.log(`From ${from} to ${to}`);
+    for(let i = from; i <= to; i++) {
+        const element = document.querySelector(`[id^="slot-day-${day}-index-${i}"]`);
+        const data = JSON.parse(element.dataset.slot);
+        const index = element.dataset.index;
+        if(selected)
+            selectSlot(element, data.day, index);
+        else
+            deSelectSlot(element, data.day, index);
+    }
+}
+
+function isSlotSelected (day, index) {
+    return selectedSlots.some(function(item) {
+        return item.day === day && item.index === index;
+    });
+}
+
+function selectSlot (element, day, index) {
+    selectedSlots.push({
+        day: day,
+        index: index
+    });
+    element.classList.add("selected");
+}
+
+function deSelectSlot (element, day, index) {
+    selectedSlots = selectedSlots.filter(function(item) {
+        return !(item.day === day && item.index === index);
+    });
+    element.classList.remove("selected");
 }
 
 function onClickDay (element) {
@@ -45,10 +83,11 @@ function toggleDay (day) {
     const toggleOn = !isDayToggledOn(day);
     elementsForDay.forEach(function(element) {
         const data = JSON.parse(element.dataset.slot);
+        const index = element.dataset.index;
         if(toggleOn) {
-            selectSlot(element, data);
+            selectSlot(element, data.day, index);
         } else {
-            deSelectSlot(element, data);
+            deSelectSlot(element, data.day, index);
         }
     });
     dayToggledMap.set(day, toggleOn);
@@ -60,36 +99,4 @@ function isDayToggledOn(day) {
     } else {
         return false;
     }
-}
-
-function slotAlreadySelected (day, index) {
-    if(selectedSlots.find(s => s.day == day && s.index == index) != undefined)
-        return true;
-    return false;
-}
-
-function multiSelectSlots (day, from, to, toggle) {
-    for(let i = from; i <= to; i++) {
-        const element = document.querySelector(`[id^="slot-day-${day}-index-${i}"]`);
-        const data = JSON.parse(element.dataset.slot);
-        if(toggle)
-            selectSlot(element, data);
-        else
-            deSelectSlot(element, data);
-    }
-}
-
-function selectSlot (element, slot, index) {
-    selectedSlots.push({
-        day: slot.day,
-        index: index
-    });
-    element.classList.add("selected");
-}
-
-function deSelectSlot (element, slot, index) {
-    selectedSlots = selectedSlots.filter(function(item) {
-        return !(item.day === slot.day && item.index === index);
-    });
-    element.classList.remove("selected");
 }
