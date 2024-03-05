@@ -70,6 +70,7 @@ export async function SignIn (req: Request, res: Response) {
         if(await UserPasswordMatching(user, password))
         {
             const userSession: UserSession = {
+                id: user.id,
                 email: user.email,
                 first_name: user.first_name,
                 last_name: user.last_name

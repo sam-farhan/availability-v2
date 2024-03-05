@@ -1,4 +1,5 @@
 export interface UserSession {
+    id: number;
     email: string;
     first_name: string;
     last_name: string;

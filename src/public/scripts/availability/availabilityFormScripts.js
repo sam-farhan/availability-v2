@@ -3,9 +3,39 @@ var lastSelection = null;
 var dayToggledMap = new Map();
 
 function onClickSaveHours (event, element) {
-    // element.disabled = true;
+    element.disabled = true;
 
-    console.log(selectedSlots);
+    const data = JSON.stringify({
+        availability: selectedSlots
+    });
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `/availability/${year}/${week}`);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    
+    // Event listener for when the request completes.
+    xhr.onload = function() {
+        if (xhr.status === 201) {
+            // window.location.href = xhr.responseText;
+        }
+        else {
+            const text = xhr.responseText;
+            const alert = createAlert("alertPlaceholder");
+            alert(text, 'danger')
+            element.disabled = false;
+        }
+    };
+    
+    // Event listener for when an error occurs.
+    xhr.onerror = function() {
+        console.error('An error occurred while submitting the form.');
+        const alert = createAlert("alertPlaceholder");
+        alert("Something went wrong. Please try again later.", 'danger')
+        element.disabled = false;
+    };
+    
+    // Send the request with data.
+    xhr.send(data);
 }
 
 function onClickTimeSlot (event, element) {
