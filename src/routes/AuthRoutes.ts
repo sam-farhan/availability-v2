@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { body } from 'express-validator';
-import { userEmailIsUnique, userNameIsUnique, userPasswordIsValid } from '../validators/AuthValidation';
+import { userEmailIsUnique, userPasswordIsValid } from '../validators/AuthValidation';
 import { SignIn, SignOut, SignUp } from '../controllers/AuthControllers';
 import { CheckNoUserSession, CheckUserSession } from '../middleware/UserSessionMiddleware';
 
@@ -20,14 +20,15 @@ router.get('/signin', CheckNoUserSession, (req: Request, res: Response) => {
 // Signup post.
 router.post("/signup", CheckNoUserSession,
     body('email').isEmail().normalizeEmail().custom(userEmailIsUnique),
-    body('username').not().isEmpty().trim().escape().custom(userNameIsUnique),
+    body('first_name').not().isEmpty().trim().escape(),
+    body('last_name').not().isEmpty().trim().escape(),
     body('password').custom(userPasswordIsValid),
     SignUp
 );
 
 // Signin post.
 router.post("/signin", CheckNoUserSession,
-    body('username').not().isEmpty().trim().escape(),
+    body('email').not().isEmpty().trim().escape(),
     body('password').custom(userPasswordIsValid),
     SignIn
 );

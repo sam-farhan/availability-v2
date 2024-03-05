@@ -6,7 +6,7 @@
         <%- include('../../partials/header'); %>
         <main>
             <div class="container">
-                <h1>Hi, <%=userSession.name%></h1>
+                <h1>Hi, <%=userSession.first_name%></h1>
                 <h4 class="mb-4">Welcome to your profile.</h4>
 
                 <form action="/auth/signout" method="post">

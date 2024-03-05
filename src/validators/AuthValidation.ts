@@ -1,17 +1,9 @@
-import { FindUserByEmail, FindUserByName } from "../database/UserRepository";
+import { FindUserByEmail } from "../database/UserRepository";
 
 export const userEmailIsUnique = async (email: string) => {
     const user = await FindUserByEmail(email);
     if (user != undefined) {
         return Promise.reject(new Error("E-mail is already in use."));
-    }
-    return Promise.resolve(true);
-};
-
-export const userNameIsUnique = async (name: string) => {
-    const user = await FindUserByName(name);
-    if (user != undefined) {
-        return Promise.reject(new Error("Username is already in use."));
     }
     return Promise.resolve(true);
 };

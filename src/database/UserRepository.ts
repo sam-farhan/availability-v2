@@ -2,21 +2,14 @@ import { databaseConnection } from './DatabaseConnection';
 import { UserSelect, UserUpdate, UserCreate } from '../types/database/UserTable';
 
 export async function FindUserByID(id: number) {
-  return await databaseConnection.selectFrom('user')
+  return <UserSelect>await databaseConnection.selectFrom('user')
     .where('id', '=', id)
     .selectAll()
     .executeTakeFirst();
 };
 
-export async function FindUserByName(name: string) {
-  return await databaseConnection.selectFrom('user')
-    .where('name', '=', name)
-    .selectAll()
-    .executeTakeFirst();
-};
-
 export async function FindUserByEmail(email: string) {
-  return await databaseConnection.selectFrom('user')
+  return <UserSelect>await databaseConnection.selectFrom('user')
     .where('email', '=', email)
     .selectAll()
     .executeTakeFirst();

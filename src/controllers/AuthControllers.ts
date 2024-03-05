@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { UserCreate, UserSelect } from "../types/database/UserTable";
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
-import { CreateUser, FindUserByName } from '../database/UserRepository';
+import { CreateUser, FindUserByEmail } from '../database/UserRepository';
 import { UserSession, UserMetadata } from '../types/User';
 import moment from 'moment';
 import { HasUserSession } from '../public/lib/auth/UserSession';
@@ -17,7 +17,8 @@ export async function SignUp (req: Request, res: Response) {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const username = req.body.username;
+    const first_name = req.body.first_name;
+    const last_name = req.body.last_name;
     const email = req.body.email;
     const password = req.body.password;
     const hashedPassword = await HashPassword(password);
@@ -26,14 +27,15 @@ export async function SignUp (req: Request, res: Response) {
         agent: req.get('user-agent') || null,
         ip: req.socket.remoteAddress || null,
         last_login: moment().format("YYYY-MM-DD HH:MM:SS")
-    }
+    };
 
     const newUser: UserCreate = {
-        name: username,
+        first_name: first_name,
+        last_name: last_name,
         email: email,
         password: hashedPassword,
         metadata: JSON.stringify(metadata)
-    }
+    };
 
     try {
         CreateUser(newUser);
@@ -53,11 +55,11 @@ export async function SignIn (req: Request, res: Response) {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const username = req.body.username;
+    const email = req.body.email;
     const password = req.body.password;
 
     try {
-        const user = <UserSelect>await FindUserByName(username);
+        const user = <UserSelect>await FindUserByEmail(email);
         if(!user) {
             const passwordMatchError = {
                 msg: "User not found.",
@@ -69,7 +71,8 @@ export async function SignIn (req: Request, res: Response) {
         {
             const userSession: UserSession = {
                 email: user.email,
-                name: user.name
+                first_name: user.first_name,
+                last_name: user.last_name
             }
             // @ts-ignore
             req.session.user = userSession;

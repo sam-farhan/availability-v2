@@ -10,7 +10,8 @@ import { UserMetadata } from '../User';
 export interface UserTable {
     // `Generated` type specifies this attribute is handled by the database.
     id: Generated<number>;
-    name: string;
+    first_name: string;
+    last_name: string;
     password: string;
     email: string;
     // You can specify JSON columns using the `JSONColumnType` wrapper.
