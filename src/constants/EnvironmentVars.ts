@@ -1,7 +1,10 @@
 export default {
     ENVIRONMENT: process.env.ENV || "DEV",
+    APP: {
+        PORT: process.env.PORT || 3000
+    },
     SESSION: {
-        ACTIVE: process.env.USE_SESSION || true, // TODO: Set this as default false.
+        ACTIVE: process.env.USE_SESSION || true,
         SECRET: process.env.SESSION_SECRET || "S3CrEtSesSiOn"
     },
     DATABASE: {

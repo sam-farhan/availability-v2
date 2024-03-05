@@ -1,9 +1,10 @@
 import express from 'express';
 import * as path from "path";
 import EnvironmentVars from "./constants/EnvironmentVars";
-import routes from "./routes/Routes";
+import routes from "./routes/routes";
 import authRoutes from "./routes/AuthRoutes";
 import userRoutes from "./routes/UserRoutes";
+import availabilityRoutes from "./routes/AvailabilityRoutes";
 import session from "express-session";
 import favicon from 'serve-favicon';
 import { AddMomentToLocals } from './middleware/MomentMiddleware';
@@ -72,7 +73,8 @@ app.set("view engine", "ejs");
 app.use('/', routes);
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/availability', availabilityRoutes);
 
 // ** Start Server ** //
-const port = process.env.PORT || 3000;
+const port = EnvironmentVars.APP.PORT;
 app.listen(port, () => console.log("Listening"));

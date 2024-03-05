@@ -3,3 +3,47 @@
 // $secondary: green;
 
 @import "../../../node_modules/bootstrap/scss/bootstrap";
+
+.availability-grid {
+    margin-top: 32px;
+
+    > .row:first-child {
+        > .col {
+            &:hover {
+                background-color: rgb(192, 252, 206);
+            }
+        }
+        & span {
+            padding-bottom: 8px;
+            padding-top: 8px;
+            font-weight: bold;
+        }
+        border-bottom: 1px solid rgb(145, 145, 145);
+    }
+
+    > .row {
+        > .col {
+            padding: 0px;
+        }
+        > .col:nth-child(even) {
+            background-color: rgb(235, 235, 235);
+        }
+
+        > .availability-slot {
+            &:hover {
+                background-color: rgb(192, 252, 206);
+            }
+            &.selected {
+                background-color: green !important;
+                color: white !important;
+            }
+        }
+    }
+
+    // Disable selecting text.
+    & span {
+        -webkit-user-select: none; /* Safari */
+        -ms-user-select: none; /* IE 10 and IE 11 */
+        user-select: none; /* Standard syntax */
+    }   
+}
