@@ -1,0 +1,8 @@
+# Node Modules
+/node_modules
+
+# Dist
+/dist
+
+# Jest coverage
+/coverage

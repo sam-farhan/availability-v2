@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../partials/head'); %>
+
+    <body>
+        <%- include('../../partials/header'); %>
+        <main>
+            <div class="container">
+                <h1>Hi, <%=userSession.name%></h1>
+                <h4 class="mb-4">Welcome to your profile.</h4>
+
+                <form action="/auth/signout" method="post">
+                    <button type="submit" class="btn btn-primary">Sign out</button>
+                </form>
+            </div>
+        </main>
+
+        <%- include('../../partials/footer'); %>
+    </body>
+</html>

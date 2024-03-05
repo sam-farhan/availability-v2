@@ -1,0 +1,35 @@
+<header class="mb-4">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-md">
+            <a class="navbar-brand" href="/">Home</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Test</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Dropdown Item</a></li>
+                            <li><a class="dropdown-item" href="#">Dropdown Item</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <% if(userSession == undefined) { %>
+                        <span class="align-middle"><a href="/auth/signin"><button class="btn btn-primary">Sign in</button></a></span>
+                    <% } else{ %> 
+                        <span class="align-middle"><a href="/user/profile">Profile</a></span>
+                    <% } %> 
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
