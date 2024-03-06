@@ -2,7 +2,7 @@ import { Request, Response, request } from "express";
 import { validationResult } from "express-validator";
 import moment from "moment";
 import { AvailabilitySlotData } from "../types/Availability";
-import { FindAvailability, SaveAvailability, UpdateAvailability } from "../database/AvailabilityRepository";
+import { FindAvailability, CreateAvailability, UpdateAvailability } from "../database/AvailabilityRepository";
 import { AvailabilityCreate, AvailabilityUpdate } from "../types/database/AvailabilityTable";
 
 export async function MyAvailability (req: Request, res: Response) {
@@ -111,7 +111,7 @@ export async function SubmitAvailability (req: Request, res: Response) {
                 week: week,
                 data: JSON.stringify(availability)
             }
-            await SaveAvailability(newAvailability);
+            await CreateAvailability(newAvailability);
         }
     
         return res.status(201).send("Ok.");

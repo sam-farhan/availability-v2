@@ -4,6 +4,7 @@ import EnvironmentVars from "./constants/EnvironmentVars";
 import routes from "./routes/routes";
 import authRoutes from "./routes/AuthRoutes";
 import userRoutes from "./routes/UserRoutes";
+import squadRoutes from "./routes/SquadRoutes";
 import availabilityRoutes from "./routes/AvailabilityRoutes";
 import session from "express-session";
 import favicon from 'serve-favicon';
@@ -74,6 +75,7 @@ app.use('/', routes);
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/availability', availabilityRoutes);
+app.use(`/squad`, squadRoutes);
 // 404.
 app.use((req: express.Request, res: express.Response) => { 
     res.status(404).render("pages/errors/404");

@@ -10,7 +10,7 @@ export async function FindAvailability(userId: number, year: number, week: numbe
     .executeTakeFirst();
 };
 
-export async function SaveAvailability(availability: AvailabilityCreate) {
+export async function CreateAvailability(availability: AvailabilityCreate) {
   return await databaseConnection.insertInto('availability')
     .values(availability)
     .returningAll()
