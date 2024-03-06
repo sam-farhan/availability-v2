@@ -1,7 +1,7 @@
 import express from 'express';
 import * as path from "path";
 import EnvironmentVars from "./constants/EnvironmentVars";
-import routes from "./routes/routes";
+import routes from "./routes/Routes";
 import authRoutes from "./routes/AuthRoutes";
 import userRoutes from "./routes/UserRoutes";
 import squadRoutes from "./routes/SquadRoutes";
@@ -83,4 +83,4 @@ app.use((req: express.Request, res: express.Response) => {
 
 // ** Start Server ** //
 const port = EnvironmentVars.APP.PORT;
-app.listen(port, () => console.log("Listening"));
+app.listen(port, () => console.log(`Listening on port ${port}.`));
