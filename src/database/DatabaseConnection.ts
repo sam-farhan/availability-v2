@@ -20,4 +20,10 @@ const dialect = new PostgresDialect({
 // to communicate with your database.
 export const databaseConnection = new Kysely<Database>({
     dialect,
+    // log(event) {
+    //     if (event.level === 'query') {
+    //         console.log(event.query.sql)
+    //         console.log(event.query.parameters)
+    //     }
+    // }
 });

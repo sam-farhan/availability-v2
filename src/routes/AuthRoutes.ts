@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { body } from 'express-validator';
 import { userEmailIsUnique, userPasswordIsValid } from '../validators/AuthValidation';
 import { SignIn, SignOut, SignUp } from '../controllers/AuthControllers';
-import { CheckNoUserSession, CheckUserSession } from '../middleware/UserSessionMiddleware';
+import { CheckNoUserSession, RequireUserSession } from '../middleware/UserSessionMiddleware';
 
 const router = Router();
 
@@ -33,7 +33,7 @@ router.post("/signin", CheckNoUserSession,
 );
 
 // Signout post.
-router.post("/signout", CheckUserSession,
+router.post("/signout", RequireUserSession,
     SignOut
 );
 

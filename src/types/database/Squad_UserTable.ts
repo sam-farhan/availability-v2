@@ -5,9 +5,9 @@ import {
 } from 'kysely';
 
 export interface Squad_UserTable {
-    id: Generated<number>;
     squad_id: number;
     user_id: number;
+    role: string;
 };
 
 export type Squad_UserSelect = Selectable<Squad_UserTable>;

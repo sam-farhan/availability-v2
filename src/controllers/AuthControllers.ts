@@ -6,6 +6,7 @@ import { CreateUser, FindUserByEmail } from '../database/UserRepository';
 import { UserSession, UserMetadata } from '../types/User';
 import moment from 'moment';
 import { HasUserSession } from '../public/lib/auth/UserSession';
+import { GetUserSquads } from '../database/Squad_UserRepository';
 
 const SALT_ROUNDS = 10;
 
@@ -69,11 +70,14 @@ export async function SignIn (req: Request, res: Response) {
         }
         if(await UserPasswordMatching(user, password))
         {
+            const squads = await GetUserSquads(user.id);
+
             const userSession: UserSession = {
                 id: user.id,
                 email: user.email,
                 first_name: user.first_name,
-                last_name: user.last_name
+                last_name: user.last_name,
+                squads: squads
             }
             // @ts-ignore
             req.session.user = userSession;

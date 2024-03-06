@@ -7,7 +7,7 @@
         <main>
             <div class="container">
                 <h1>Week <%=week;%></h1>
-                <h4><%=momentWeek.clone().day(1).format("dddd, MMMM Do")%> - <%=momentWeek.clone().day(7).format("dddd, MMMM Do")%></h4>
+                <h4><%=momentWeek.clone().day(1).format("dddd, Do MMMM")%> - <%=momentWeek.clone().day(7).format("dddd, Do MMMM")%></h4>
                 <p>Tap on a day to select all slots for that day.</p>
                 <p class="d-none d-md-block">Hold shift to multiselect days.</p>
 

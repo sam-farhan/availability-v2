@@ -9,7 +9,7 @@ export function AddUserSessionToLocals (req: Request, res: Response, next: NextF
 
 // Checks if the user has a session.
 // If they don't, take them to the sign in page.
-export function CheckUserSession(req: Request, res: Response, next: NextFunction) {
+export function RequireUserSession(req: Request, res: Response, next: NextFunction) {
     const userSession = GetUserSession(req);
     if (!userSession) {
         const originalUrl = req.originalUrl;

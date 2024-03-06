@@ -1,6 +1,12 @@
 import { databaseConnection } from './DatabaseConnection';
 import { UserSelect, UserUpdate, UserCreate } from '../types/database/UserTable';
 
+export async function GetAllUsers() {
+  return <UserSelect[]>await databaseConnection.selectFrom('user')
+    .selectAll()
+    .execute();
+};
+
 export async function FindUserByID(id: number) {
   return <UserSelect>await databaseConnection.selectFrom('user')
     .where('id', '=', id)

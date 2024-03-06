@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { CheckUserSession } from '../middleware/UserSessionMiddleware';
+import { RequireUserSession } from '../middleware/UserSessionMiddleware';
 import { body, param } from 'express-validator';
 import { EditAvailability, MyAvailability, SubmitAvailability } from '../controllers/AvailabilityControllers';
 
@@ -9,7 +9,7 @@ const router = Router();
 router.get('/:year/:week',
     param('year').isInt({min: 0}).toInt(),
     param('week').isInt({min: 1, max: 52}).toInt(),
-    CheckUserSession,
+    RequireUserSession,
     MyAvailability
 );
 
@@ -17,7 +17,7 @@ router.get('/:year/:week',
 router.get('/:year/:week/edit',
     param('year').isInt({min: 0}).toInt(),
     param('week').isInt({min: 1, max: 52}).toInt(),
-    CheckUserSession,
+    RequireUserSession,
     EditAvailability
 );
 
@@ -26,7 +26,7 @@ router.post('/:year/:week',
     param('year').isInt({min: 0}).toInt(),
     param('week').isInt({min: 1, max: 52}).toInt(),
     // body("availability").not().isEmpty().trim().escape(),
-    CheckUserSession,
+    RequireUserSession,
     SubmitAvailability
 );
 
