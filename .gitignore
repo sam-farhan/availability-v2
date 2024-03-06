@@ -6,3 +6,5 @@
 
 # Jest coverage
 /coverage
+
+local_vars
