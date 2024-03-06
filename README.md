@@ -6,6 +6,8 @@ PM2 can then be used to run the bash script `run.sh` which is included in this r
 
 If you are not using Amazon Linux, then you may need to [install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
 
+A MySQL database is required for the app to function. The [database structure](https://github.com/sam-farhan/availability-v2/blob/main/db_structure.sql) is included in this repo. Again, an AWS RDS instance would be ideal for this purpose.
+
 ## Install
 
 ```sh
