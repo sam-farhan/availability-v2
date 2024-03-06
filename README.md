@@ -1,9 +1,3 @@
-# Welcome to app-template 👋
-[![Version](https://img.shields.io/npm/v/app-template.svg)](https://www.npmjs.com/package/app-template)
-[![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg)](#)
-
-> Basic Express app template.
-
 ## Install
 
 ```sh
