@@ -1,10 +1,12 @@
-# Node Modules
+# Node modules.
 /node_modules
 
-# Dist
+# Dist.
 /dist
 
-# Jest coverage
+# Jest coverage.
 /coverage
 
-local_vars
+# Compiled CSS.
+/src/public/style/custom_bootstrap.css
+/src/public/style/custom_bootstrap.css.map
