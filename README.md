@@ -1,10 +1,10 @@
 # Recommended Setup
 
-[Node.js with Nginx on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-20-04)
+This web app was built to be ran on an AWS EC2 instance. The Node.js process should not be exposed to the internet, but rather [Nginx can be configured to act as a reverse proxy](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-20-04).
 
-PM2 can then be used to run the bash script `run.sh` which is included in this repository.
+PM2 can then be used to run the bash script `run.sh` which is included in this repository. This script will automatically pass environment variables configured in AWS Systems Manager Parameter Store to the Node process.
 
-The AWS Systems Manager Parameter Store can be used to configure the environment variables. If using the supplied bash script they will be automatically passed to the node process.
+If you are not using Amazon Linux, then you may need to [install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html).
 
 ## Install
 
