@@ -2,6 +2,11 @@ var selectedSlots = [];
 var lastSelection = null;
 var dayToggledMap = new Map();
 
+window.onload = (event) => {
+    if(editing) 
+        selectedSlots = embeddedAvailability;
+};
+
 function onClickSaveHours (event, element) {
     element.disabled = true;
 
@@ -16,7 +21,7 @@ function onClickSaveHours (event, element) {
     // Event listener for when the request completes.
     xhr.onload = function() {
         if (xhr.status === 201) {
-            // window.location.href = xhr.responseText;
+            window.location.href = `/availability/${year}/${week}`;
         }
         else {
             const text = xhr.responseText;

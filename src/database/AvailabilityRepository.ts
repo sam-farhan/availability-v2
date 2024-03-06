@@ -1,4 +1,4 @@
-import { AvailabilityCreate, AvailabilitySelect } from '../types/database/AvailabilityTable';
+import { AvailabilityCreate, AvailabilitySelect, AvailabilityUpdate } from '../types/database/AvailabilityTable';
 import { databaseConnection } from './DatabaseConnection';
 
 export async function FindAvailability(userId: number, year: number, week: number) {
@@ -14,12 +14,12 @@ export async function SaveAvailability(availability: AvailabilityCreate) {
   return await databaseConnection.insertInto('availability')
     .values(availability)
     .returningAll()
-    .executeTakeFirstOrThrow()
+    .executeTakeFirstOrThrow();
 };
 
-// export async function UpdateUser(id: number, updateWith: UserUpdate) {
-//   await databaseConnection.updateTable('user').set(updateWith).where('id', '=', id).execute()
-// };
+export async function UpdateAvailability(id: number, updateWith: AvailabilityUpdate) {
+  await databaseConnection.updateTable('availability').set(updateWith).where('id', '=', id).execute();
+};
 
 // export async function DeleteUser(id: number) {
 //   return await databaseConnection.deleteFrom("user").where('id', '=', id)

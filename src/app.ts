@@ -74,6 +74,10 @@ app.use('/', routes);
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/availability', availabilityRoutes);
+// 404.
+app.use((req: express.Request, res: express.Response) => { 
+    res.status(404).render("pages/errors/404");
+}) 
 
 // ** Start Server ** //
 const port = EnvironmentVars.APP.PORT;
