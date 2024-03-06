@@ -40,25 +40,6 @@ export async function GetUserInSquad(userId: number, squadId: number) {
     .executeTakeFirst();
 }
 
-// export async function GetAllUsersNotInSquad(squadId: number) {
-//   const result = await databaseConnection
-//     .selectFrom("user")
-//     .select("user.id")
-//     .select("user.first_name")
-//     .select("user.last_name")
-//     .select("user.email")
-//     .leftJoin("squad_user", "user.id", "squad_user.user_id")
-//     .where((eb) => eb.or([
-//       eb('squad_user.squad_id', '!=', squadId),
-//       eb('squad_user.squad_id', 'is', null)
-//     ]))
-//     // .where("squad_user.squad_id", "is", null)
-//     .selectAll()
-//     .execute()
-
-//   return result.map(({ id, first_name, last_name, email }) => ({ id, first_name, last_name, email }));
-// }
-
 export async function UpdateUserRoleInSquad(userId: number, squadId: number, role: string) {
   return await databaseConnection.updateTable("squad_user")
     .set({role: role})

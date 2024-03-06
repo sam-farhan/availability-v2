@@ -21,8 +21,12 @@ export async function UpdateAvailability(id: number, updateWith: AvailabilityUpd
   await databaseConnection.updateTable('availability').set(updateWith).where('id', '=', id).execute();
 };
 
-// export async function DeleteUser(id: number) {
-//   return await databaseConnection.deleteFrom("user").where('id', '=', id)
-//     .returningAll()
-//     .executeTakeFirst()
-// };
+export async function FindAvailabilityForSquad(squadId: number, year: number, week: number) {
+  return <AvailabilitySelect[]>await databaseConnection.selectFrom('availability')
+    .innerJoin("squad_user", "availability.availability_user", "squad_user.user_id")
+    .where("availability.year", "=", year)
+    .where("availability.week", "=", week)
+    .where("squad_user.squad_id", "=", squadId)
+    .selectAll()
+    .execute();
+};

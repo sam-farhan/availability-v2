@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../../partials/head'); %>
+
+    <body>
+        <%- include('../../partials/header'); %>
+        <main>
+            <div class="container">
+                <h1>Week <%=week;%></h1>
+                <h4 class="">Squad availability: <%=squad.name%></h4>
+                <h6 class="d-md-none mb-4"><%=momentWeek.clone().day(1).format("dddd, Do MMMM")%> - <%=momentWeek.clone().day(7).format("dddd, Do MMMM")%></h6>
+
+                <div class="row">
+                    <h5>Coaches</h5>
+                    <%
+                    const coaches = squadUsers.filter(x => x.role == "Coach");    
+                    for(const coach of coaches) { %>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <input class="form-check-input" oninput="onInputUser(event, this);" type="checkbox" value="" id="<%=`select-member-${coach.id}`%>" data-user="<%=coach.id%>">
+                        <label class="form-check-label" for="<%=`select-member-${coach.id}`%>">
+                            <%=coach.first_name%> <%=coach.last_name%>
+                        </label>                            
+                    </div>
+                    <% } %>
+                </div>
+
+                <div class="row mt-2">
+                    <h5>Rowers</h5>
+                    <%
+                    const rowers = squadUsers.filter(x => x.role == "Rower"); 
+                    for(const rower of rowers) { %>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <input class="form-check-input" oninput="onInputUser(event, this);" type="checkbox" value="" id="<%=`select-member-${rower.id}`%>" data-user="<%=rower.id%>">
+                        <label class="form-check-label" for="<%=`select-member-${rower.id}`%>">
+                            <%=rower.first_name%> <%=rower.last_name%>
+                        </label>                            
+                    </div>
+                    <% } %>
+                </div>
+
+                <div class="grid availability-grid">
+                    <!-- Header row showing day names. -->
+                    <div class="row text-center align-items-center read-only">
+                        <%
+                        for (let i = 1; i <= 7; i++) {
+                            const day = momentWeek.clone().add(i, "days");
+                            %>
+                            <div class="col" data-day="<%=i;%>">
+                                <span class="d-none d-md-block">
+                                    <%=day.format("dddd Do");%>
+                                </span>
+                                <span class="d-md-none">
+                                    <%=day.format("ddd");%>
+                                </span>
+                            </div>
+                        <%
+                        }
+                        %>
+                    </div>
+                    <%
+                    for (let slot = 0; slot < (17 * 2) - 1; slot++) {
+                        minute = 360 + (slot * 30);
+                        %>
+                        <div class="row text-center align-items-center read-only">
+                            <%
+                            for (let day = 1; day <= 7; day++) {
+                                const halfHour = momentWeek.clone().add(day, "days");
+                                halfHour.add(minute, "minutes");
+                                %>
+                                <div class="col availability-slot" id="slot-day-<%=day;%>-index-<%=slot%>">
+                                    <span class="d-none d-md-block">
+                                        <%=halfHour.format("kk:mm");%>
+                                    </span>
+                                    <span class="d-md-none">
+                                        <%=halfHour.format("kk:mm");%>
+                                    </span>
+                                </div>
+                            <%
+                            }
+                            %>
+                        </div>
+                    <%
+                    }
+                    %>
+                </div>
+            </div>
+        </main>
+
+        <script src="/scripts/availability/squadAvailabilityPageScripts.js" type="text/javascript"></script>
+        <script src="/scripts/utility/alertUtils.js" type="text/javascript"></script>
+        <script>
+            const year = <%=year%>;
+            const week = <%=week%>;
+            <%
+            const data = JSON.stringify(squadAvailability);
+            %>
+            const embeddedAvailability = <%-data%>
+        </script>
+    </body>
+</html>

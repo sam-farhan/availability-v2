@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import moment from "moment";
 import { SquadCreate } from "../types/database/SquadTable";
@@ -9,6 +9,7 @@ import { SquadMetadata, SquadRoleCoach, SquadRoleRower, SquadUser } from "../typ
 import { UserSession } from "../types/User";
 import { GetAllUsers } from "../database/UserRepository";
 import { UserSelect } from "../types/database/UserTable";
+import { FindAvailabilityForSquad } from "../database/AvailabilityRepository";
 
 export async function ViewSquad (req: Request, res: Response) {
     // Run validation.
@@ -64,7 +65,32 @@ export async function ViewSquadAvailability (req: Request, res: Response) {
     const week = parseInt(req.params.week);
     const momentWeek = moment().year(year).week(week).startOf("week");
 
-    res.send(`Year: ${year} week: ${week}`);
+    try {
+        const squad = await FindSquad(squadId);
+        const squadUsers = await GetSquadUsers(squad.id);
+        squadUsers.sort((a, b) => {
+            if (a.role === 'Coach' && b.role === 'Rower') {
+                return -1; // 'Coach' comes before 'Rower'
+            } else if (a.role === 'Rower' && b.role === 'Coach') {
+                return 1; // 'Rower' comes after 'Coach'
+            } else {
+                return 0; // No change in order
+            }
+        });
+        const squadAvailability = await FindAvailabilityForSquad(squadId, year, week);
+        return res.render("pages/availability/squadAvailability",
+        {
+            year: year,
+            week: week,
+            momentWeek: momentWeek,
+            squad: squad,
+            squadUsers: squadUsers,
+            squadAvailability: squadAvailability
+        });
+    } catch (error) {
+        console.error(error);
+    }
+    return res.render("pages/errors/503");
 }
 
 function subtractUsers(allUsers: UserSelect[], squadUsers: SquadUser[]): UserSelect[] {

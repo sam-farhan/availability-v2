@@ -7,7 +7,7 @@
         <main>
             <div class="container">
                 <h1>Week <%=week;%></h1>
-                <h4><%=momentWeek.clone().day(1).format("dddd, MMMM Do")%> - <%=momentWeek.clone().day(7).format("dddd, MMMM Do")%></h4>
+                <h6 class="d-md-none"><%=momentWeek.clone().day(1).format("dddd, Do MMMM")%> - <%=momentWeek.clone().day(7).format("dddd, Do MMMM")%></h6>
 
                 <div class="grid availability-grid">
                     <!-- Header row showing day names. -->
