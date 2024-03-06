@@ -12,7 +12,8 @@ export function AddUserSessionToLocals (req: Request, res: Response, next: NextF
 export function CheckUserSession(req: Request, res: Response, next: NextFunction) {
     const userSession = GetUserSession(req);
     if (!userSession) {
-        return res.redirect("/auth/signin");
+        const originalUrl = req.originalUrl;
+        return res.redirect(`/auth/signin?target=${originalUrl}`);
     }
     next();
 }

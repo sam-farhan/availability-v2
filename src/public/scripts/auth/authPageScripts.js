@@ -44,6 +44,12 @@ async function submitForm (event) {
     // Event listener for when the request completes.
     xhr.onload = function() {
         if (xhr.status === 200) {
+            const params = new URLSearchParams(window.location.search);
+            if(params.has("target")) {
+                const redirect = params.get("target");
+                window.location.href = redirect;
+                return;
+            }
             window.location.href = xhr.responseText;
         }
         else {

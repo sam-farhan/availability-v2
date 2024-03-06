@@ -9,7 +9,7 @@ const router = Router();
 router.get('/:year/:week',
     param('year').isInt({min: 0}).toInt(),
     param('week').isInt({min: 1, max: 52}).toInt(),
-    // CheckUserSession,
+    CheckUserSession,
     MyAvailability
 );
 
@@ -18,7 +18,7 @@ router.post('/:year/:week',
     param('year').isInt({min: 0}).toInt(),
     param('week').isInt({min: 1, max: 52}).toInt(),
     // body("availability").not().isEmpty().trim().escape(),
-    // CheckUserSession,
+    CheckUserSession,
     SubmitAvailability
 );
 

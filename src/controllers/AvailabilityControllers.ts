@@ -37,24 +37,29 @@ export async function SubmitAvailability (req: Request, res: Response) {
     const user = req.session.user;
     const year = parseInt(req.params.year);
     const week = parseInt(req.params.week);
+
+    try {
+        if(await FindAvailability(user.id, year, week) != undefined) {
+            return res.status(400).send("Availability for this week already saved.");
+        }
     
-    if(await FindAvailability(user.id, year, week) != undefined) {
-        return res.status(400).send("Availability for this week already saved.");
+        const availability = req.body.availability;
+        // Sort the list by day.
+        req.body.availability.sort(function(a: AvailabilitySlotData, b: AvailabilitySlotData) {
+            return a.day - b.day;
+        });
+    
+        const newAvailability: AvailabilityCreate = {
+            availability_user: user.id,
+            year: year,
+            week: week,
+            data: JSON.stringify(availability)
+        }
+        await SaveAvailability(newAvailability);
+    
+        res.status(201).send("Ok.");
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Something went wrong, please try again later.");
     }
-
-    const availability = req.body.availability;
-    // Sort the list by day.
-    req.body.availability.sort(function(a: AvailabilitySlotData, b: AvailabilitySlotData) {
-        return a.day - b.day;
-    });
-
-    const newAvailability: AvailabilityCreate = {
-        availability_user: user.id,
-        year: year,
-        week: week,
-        data: JSON.stringify(availability)
-    }
-    await SaveAvailability(newAvailability);
-
-    res.status(201).send("Ok.");
 }

@@ -16,7 +16,6 @@ router.get('/signin', CheckNoUserSession, (req: Request, res: Response) => {
     res.render("pages/auth/signin");
 });
 
-
 // Signup post.
 router.post("/signup", CheckNoUserSession,
     body('email').isEmail().normalizeEmail().custom(userEmailIsUnique),
