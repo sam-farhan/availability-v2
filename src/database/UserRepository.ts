@@ -28,12 +28,10 @@ export async function UpdateUser(id: number, updateWith: UserUpdate) {
 export async function CreateUser(user: UserCreate) {
   return await databaseConnection.insertInto('user')
     .values(user)
-    .returningAll()
-    .executeTakeFirstOrThrow()
+    .executeTakeFirst()
 };
 
 export async function DeleteUser(id: number) {
   return await databaseConnection.deleteFrom("user").where('id', '=', id)
-    .returningAll()
     .executeTakeFirst()
 };

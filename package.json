@@ -48,7 +48,7 @@
     "express-validator": "^7.0.1",
     "kysely": "^0.27.2",
     "moment": "^2.29.4",
-    "pg": "^8.11.3",
+    "mysql2": "^3.9.2",
     "serve-favicon": "^2.5.0"
   }
 }

@@ -8,7 +8,7 @@ function onInputUser (event, element) {
         }
     }
     clearHighlighting();
-    if(selectedUserIds.length > 0)
+    if(selectedUserIds.length > 0 && embeddedAvailability.length > 0)
         setHighlightedSlots(selectedUserIds);
 }
 

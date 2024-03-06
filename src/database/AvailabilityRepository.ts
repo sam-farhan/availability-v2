@@ -13,7 +13,6 @@ export async function FindAvailability(userId: number, year: number, week: numbe
 export async function CreateAvailability(availability: AvailabilityCreate) {
   return await databaseConnection.insertInto('availability')
     .values(availability)
-    .returningAll()
     .executeTakeFirstOrThrow();
 };
 

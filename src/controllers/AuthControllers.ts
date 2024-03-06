@@ -63,8 +63,8 @@ export async function SignIn (req: Request, res: Response) {
         const user = <UserSelect>await FindUserByEmail(email);
         if(!user) {
             const passwordMatchError = {
-                msg: "User not found.",
-                path: "username"
+                msg: "Account not found.",
+                path: "email"
             }
             return res.status(401).json({ errors: [passwordMatchError] });
         }

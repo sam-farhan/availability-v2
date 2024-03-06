@@ -53,11 +53,11 @@ async function submitForm (event) {
             window.location.href = xhr.responseText;
         }
         else {
-            var errorResponse = JSON.parse(xhr.responseText);
             if(xhr.status == 500) {
                 const alert = createAlert("alertPlaceholder");
                 alert("Something went wrong. Please try again later.", 'danger')
             } else {
+                const errorResponse = JSON.parse(xhr.responseText);
                 displayErrorMessages(errorResponse.errors);
             }
             enableForm(form);

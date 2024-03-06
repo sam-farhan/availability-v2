@@ -121,14 +121,19 @@ export async function CreateSquadController (req: Request, res: Response) {
 
     try {
         const squadDb = await CreateSquad(newSquad);
+        const newSquadId = Number(squadDb.insertId);
         const newSquad_User: Squad_UserCreate = {
             user_id: user.id,
-            squad_id: squadDb.id,
+            squad_id: newSquadId,
             role: SquadRoleCoach
         };
         await AddUserToSquad(newSquad_User);
-        user.squads.push(squadDb);
-        return res.status(201).send(`/squad/${squadDb.id}`);
+        user.squads.push({
+            id: newSquadId,
+            name: newSquad.name,
+            metadata: metadata
+        });
+        return res.status(201).send(`/squad/${newSquadId}`);
     } catch (error) {
         console.error(error);
     }

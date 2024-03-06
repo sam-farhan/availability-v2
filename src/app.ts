@@ -82,6 +82,11 @@ app.use((req: express.Request, res: express.Response) => {
     res.status(404).render("pages/errors/404");
 }) 
 
+// Log environment variables.
+console.log("================= CONFIGURATION =================");
+console.log(JSON.stringify(EnvironmentVars, null, 4));
+console.log("================= CONFIGURATION =================");
+
 // ** Start Server ** //
 const port = EnvironmentVars.APP.PORT;
 app.listen(port, () => console.log(`Listening on port ${port}.`));

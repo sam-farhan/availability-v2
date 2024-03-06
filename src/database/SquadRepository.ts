@@ -11,6 +11,5 @@ export async function FindSquad(id: number): Promise<SquadSelect> {
 export async function CreateSquad(squad: SquadCreate) {
   return await databaseConnection.insertInto('squad')
     .values(squad)
-    .returningAll()
     .executeTakeFirstOrThrow();
 };
