@@ -1,7 +1,7 @@
 import express from 'express';
 import * as path from "path";
 import EnvironmentVars from "./constants/EnvironmentVars";
-import routes from "./routes/Routes"
+import routes from "./routes/routes"
 import authRoutes from "./routes/AuthRoutes";
 import userRoutes from "./routes/UserRoutes";
 import squadRoutes from "./routes/SquadRoutes";
