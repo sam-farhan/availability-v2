@@ -64,8 +64,6 @@ export async function EditAvailability (req: Request, res: Response) {
         });
     }
 
-    console.log(JSON.stringify(existingAvailability.data));
-
     res.render("pages/availability/myavailability",
     {
         year: year,
@@ -133,7 +131,6 @@ export async function CopyAvailability (req: Request, res: Response) {
     const user = req.session.user;
     const year = parseInt(req.params.year);
     const week = parseInt(req.params.week);
-    const availability = req.body.availability;
 
     var lastWeek = week - 1;
     var lastWeekYear = year;
@@ -143,19 +140,31 @@ export async function CopyAvailability (req: Request, res: Response) {
     }
 
     try {
-        const existing = await FindAvailability(user.id, lastWeekYear, lastWeek);
-        if(existing == undefined) {
+        const lastWeekDb = await FindAvailability(user.id, lastWeekYear, lastWeek);
+        if(lastWeekDb == undefined) {
             return res.status(400).send(`Availability not saved for ${lastWeekYear}, week ${lastWeek}.`);
         }
 
-        const newAvailability: AvailabilityCreate = {
-            availability_user: user.id,
-            year: year,
-            week: week,
-            data: JSON.stringify(existing.data)
+        const thisWeekDb = await FindAvailability(user.id, year, week);
+
+        if(thisWeekDb == undefined) {
+            const newAvailability: AvailabilityCreate = {
+                availability_user: user.id,
+                year: year,
+                week: week,
+                data: JSON.stringify(lastWeekDb.data)
+            }
+            await CreateAvailability(newAvailability);
+        } else {
+            const updatedAvailability: AvailabilityUpdate = {
+                availability_user: user.id,
+                year: year,
+                week: week,
+                data: JSON.stringify(lastWeekDb.data)
+            };
+            await UpdateAvailability(thisWeekDb.id, updatedAvailability);
         }
-        await CreateAvailability(newAvailability);
-    
+
         return res.status(201).send("Ok.");
     } catch (error) {
         console.error(error);
