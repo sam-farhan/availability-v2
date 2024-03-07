@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { RequireUserSession } from '../middleware/UserSessionMiddleware';
 import { body, param } from 'express-validator';
-import { EditAvailability, MyAvailability, SubmitAvailability } from '../controllers/AvailabilityControllers';
+import { CopyAvailability, EditAvailability, MyAvailability, SubmitAvailability } from '../controllers/AvailabilityControllers';
 
 const router = Router();
 
@@ -28,6 +28,14 @@ router.post('/:year/:week',
     // body("availability").not().isEmpty().trim().escape(),
     RequireUserSession,
     SubmitAvailability
+);
+
+// Copy availability.
+router.post('/:year/:week/copy',
+    param('year').isInt({min: 0}).toInt(),
+    param('week').isInt({min: 1, max: 52}).toInt(),
+    RequireUserSession,
+    CopyAvailability
 );
 
 export default router;

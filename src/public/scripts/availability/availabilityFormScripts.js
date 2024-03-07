@@ -43,6 +43,38 @@ function onClickSaveHours (event, element) {
     xhr.send(data);
 }
 
+function onClickCopyHours (event, element) {
+    element.disabled = true;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `/availability/${year}/${week}/copy`);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    
+    // Event listener for when the request completes.
+    xhr.onload = function() {
+        if (xhr.status === 201) {
+            window.location.href = `/availability/${year}/${week}`;
+        }
+        else {
+            const text = xhr.responseText;
+            const alert = createAlert("alertPlaceholder");
+            alert(text, 'danger')
+            element.disabled = false;
+        }
+    };
+    
+    // Event listener for when an error occurs.
+    xhr.onerror = function() {
+        console.error('An error occurred while submitting the form.');
+        const alert = createAlert("alertPlaceholder");
+        alert("Something went wrong. Please try again later.", 'danger')
+        element.disabled = false;
+    };
+    
+    // Send the request.
+    xhr.send();
+}
+
 function onClickTimeSlot (event, element) {
     const data = JSON.parse(element.dataset.slot);
     const day = data.day;

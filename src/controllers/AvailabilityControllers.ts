@@ -120,3 +120,45 @@ export async function SubmitAvailability (req: Request, res: Response) {
         return res.status(500).send("Something went wrong, please try again later.");
     }
 }
+
+export async function CopyAvailability (req: Request, res: Response) {
+    // Run validation.
+    const errors = validationResult(req);
+    // If we have validation errors, return them.
+    if (!errors.isEmpty()) {
+        return res.status(400).send("Something went wrong.");
+    }
+
+    // @ts-ignore
+    const user = req.session.user;
+    const year = parseInt(req.params.year);
+    const week = parseInt(req.params.week);
+    const availability = req.body.availability;
+
+    var lastWeek = week - 1;
+    var lastWeekYear = year;
+    if(lastWeek <= 0) {
+        lastWeek = 52;
+        lastWeekYear --;
+    }
+
+    try {
+        const existing = await FindAvailability(user.id, lastWeekYear, lastWeek);
+        if(existing == undefined) {
+            return res.status(400).send(`Availability not saved for ${lastWeekYear}, week ${lastWeek}.`);
+        }
+
+        const newAvailability: AvailabilityCreate = {
+            availability_user: user.id,
+            year: year,
+            week: week,
+            data: JSON.stringify(existing.data)
+        }
+        await CreateAvailability(newAvailability);
+    
+        return res.status(201).send("Ok.");
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Something went wrong, please try again later.");
+    }
+}
