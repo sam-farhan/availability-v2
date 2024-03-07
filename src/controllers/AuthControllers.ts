@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
-import { UserCreate, UserSelect } from "../types/database/UserTable";
+import { UserCreate, UserSelect, UserUpdate } from "../types/database/UserTable";
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
-import { CreateUser, FindUserByEmail } from '../database/UserRepository';
+import { CreateUser, FindUserByEmail, UpdateUserMetadata } from '../database/UserRepository';
 import { UserSession, UserMetadata } from '../types/User';
 import moment from 'moment';
 import { HasUserSession } from '../public/lib/auth/UserSession';
@@ -26,8 +26,8 @@ export async function SignUp (req: Request, res: Response) {
 
     const metadata: UserMetadata = {
         agent: req.get('user-agent') || null,
-        ip: req.socket.remoteAddress || null,
-        last_login: moment().format("YYYY-MM-DD HH:MM:SS")
+        ip: req.ip || null,
+        last_login: moment().format("YYYY-MM-DD HH:mm:ss")
     };
 
     const newUser: UserCreate = {
@@ -71,6 +71,14 @@ export async function SignIn (req: Request, res: Response) {
         if(await UserPasswordMatching(user, password))
         {
             const squads = await GetUserSquads(user.id);
+
+            const metadata: UserMetadata = {
+                agent: req.get('user-agent') || null,
+                ip: req.ip || null,
+                last_login: moment().format("YYYY-MM-DD HH:mm:ss")
+            };
+
+            await UpdateUserMetadata(user.id, metadata);
 
             const userSession: UserSession = {
                 id: user.id,

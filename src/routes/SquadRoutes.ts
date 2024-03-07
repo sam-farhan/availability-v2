@@ -24,8 +24,8 @@ router.get('/:id/availability/:year/:week',
     param('id').isInt().toInt(),
     param('year').isInt({min: 0}).toInt(),
     param('week').isInt({min: 1, max: 52}).toInt(),
-    //RequireUserSession,
-    //CheckUserInSquad,
+    RequireUserSession,
+    CheckUserInSquad,
     ViewSquadAvailability
 );
 

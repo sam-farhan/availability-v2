@@ -1,5 +1,6 @@
 import { databaseConnection } from './DatabaseConnection';
 import { UserSelect, UserUpdate, UserCreate } from '../types/database/UserTable';
+import { UserMetadata } from '../types/User';
 
 export async function GetAllUsers() {
   return <UserSelect[]>await databaseConnection.selectFrom('user')
@@ -23,6 +24,13 @@ export async function FindUserByEmail(email: string) {
 
 export async function UpdateUser(id: number, updateWith: UserUpdate) {
   await databaseConnection.updateTable('user').set(updateWith).where('id', '=', id).execute()
+};
+
+export async function UpdateUserMetadata(id: number, newMetadata: UserMetadata) {
+  await databaseConnection.updateTable('user')
+    .set({ metadata: JSON.stringify(newMetadata) })
+    .where('id', '=', id)
+    .execute()
 };
 
 export async function CreateUser(user: UserCreate) {
