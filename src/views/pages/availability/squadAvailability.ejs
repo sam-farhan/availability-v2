@@ -14,13 +14,18 @@
                     <h5>Coaches</h5>
                     <%
                     const coaches = squadUsers.filter(x => x.role == "Coach");    
-                    for(const coach of coaches) { %>
-                    <div class="col-lg-3 col-md-4 col-sm-6">
-                        <input class="form-check-input" oninput="onInputUser(event, this);" type="checkbox" value="" id="<%=`select-member-${coach.id}`%>" data-user="<%=coach.id%>">
-                        <label class="form-check-label" for="<%=`select-member-${coach.id}`%>">
-                            <%=coach.first_name%> <%=coach.last_name%>
-                        </label>                            
-                    </div>
+                    for(const coach of coaches) {
+                        var customClass = "";
+                        const match = usersMissingAvailability.find(u => u == coach.id);
+                        if(match)
+                            customClass = "missing";
+                        %>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <input class="form-check-input" oninput="onInputUser(event, this);" type="checkbox" value="" id="<%=`select-member-${coach.id}`%>" data-user="<%=coach.id%>">
+                            <label class="form-check-label <%=customClass%>" for="<%=`select-member-${coach.id}`%>">
+                                <%=coach.first_name%> <%=coach.last_name%>
+                            </label>                            
+                        </div>
                     <% } %>
                 </div>
 
@@ -28,13 +33,18 @@
                     <h5>Rowers</h5>
                     <%
                     const rowers = squadUsers.filter(x => x.role == "Rower"); 
-                    for(const rower of rowers) { %>
-                    <div class="col-lg-3 col-md-4 col-sm-6">
-                        <input class="form-check-input" oninput="onInputUser(event, this);" type="checkbox" value="" id="<%=`select-member-${rower.id}`%>" data-user="<%=rower.id%>">
-                        <label class="form-check-label" for="<%=`select-member-${rower.id}`%>">
-                            <%=rower.first_name%> <%=rower.last_name%>
-                        </label>                            
-                    </div>
+                    for(const rower of rowers) { 
+                        var customClass = "";
+                        const match = usersMissingAvailability.find(u => u == coach.id);
+                        if(match)
+                            customClass = "missing";
+                        %>
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <input class="form-check-input" oninput="onInputUser(event, this);" type="checkbox" value="" id="<%=`select-member-${rower.id}`%>" data-user="<%=rower.id%>">
+                            <label class="form-check-label <%=customClass%>" for="<%=`select-member-${rower.id}`%>">
+                                <%=rower.first_name%> <%=rower.last_name%>
+                            </label>                            
+                        </div>
                     <% } %>
                 </div>
 

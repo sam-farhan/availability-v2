@@ -78,6 +78,9 @@ export async function ViewSquadAvailability (req: Request, res: Response) {
             }
         });
         const squadAvailability = await FindAvailabilityForSquad(squadId, year, week);
+        // Get list of User IDs who have not filled in their availability for this week.
+        const usersMissingAvailability = squadUsers.filter(u => !squadAvailability.find(s => s.availability_user == u.id)).map(u => u.id);
+
         return res.render("pages/availability/squadAvailability",
         {
             year: year,
@@ -85,7 +88,8 @@ export async function ViewSquadAvailability (req: Request, res: Response) {
             momentWeek: momentWeek,
             squad: squad,
             squadUsers: squadUsers,
-            squadAvailability: squadAvailability
+            squadAvailability: squadAvailability,
+            usersMissingAvailability: usersMissingAvailability
         });
     } catch (error) {
         console.error(error);
