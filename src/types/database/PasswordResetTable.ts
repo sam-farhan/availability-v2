@@ -9,6 +9,8 @@ export interface PasswordResetTable {
     ip: string;
     email: string;
     timestamp: string;
+    hash: string;
+    active: Generated<number>;
 };
 
 export type PasswordResetSelect = Selectable<PasswordResetTable>;

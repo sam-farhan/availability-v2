@@ -77,14 +77,17 @@ app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/availability', availabilityRoutes);
 app.use(`/squad`, squadRoutes);
-// 404.
-app.use((req: express.Request, res: express.Response) => { 
-    res.status(404).render("pages/errors/404");
-});
 // 503.
 app.get("/503", (req: express.Request, res: express.Response) => { 
     res.render("pages/errors/503");
-}) 
+});
+// 404.
+app.get("/404", (req: express.Request, res: express.Response) => { 
+    res.render("pages/errors/404");
+});
+app.use((req: express.Request, res: express.Response) => { 
+    res.status(404).render("pages/errors/404");
+});
 
 // Log environment variables.
 console.log("================= CONFIGURATION =================");

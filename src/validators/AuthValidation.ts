@@ -26,7 +26,7 @@ export const validatePasswordMatch = [
     body('passwordConfirm').notEmpty().withMessage('Password confirmation is required.'),
     body('passwordConfirm').custom((value, { req }) => {
         if (value !== req.body.password) {
-            throw new Error('Passwords do not match.');
+            return Promise.reject(new Error('Passwords do not match.'));
         }
         return true;
     })

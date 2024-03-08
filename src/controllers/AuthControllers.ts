@@ -1,16 +1,18 @@
 import { UserCreate, UserSelect, UserUpdate } from "../types/database/UserTable";
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
-import { CreateUser, FindUserByEmail, UpdateUserMetadata } from '../database/UserRepository';
+import { CreateUser, FindUserByEmail, UpdateUser, UpdateUserMetadata } from '../database/UserRepository';
 import { UserSession, UserMetadata } from '../types/User';
 import moment from 'moment';
-import { HasUserSession } from '../public/lib/auth/UserSession';
+import { HasUserSession } from '../lib/auth/UserSession';
 import { GetUserSquads } from '../database/Squad_UserRepository';
 import { HashPassword, UserPasswordMatching } from "../lib/password/PasswordHashing";
 import { SendEmail } from "../lib/email/SendEmail";
 import AppConstants from "../constants/AppConstants";
-import { CreatePasswordReset, FindRecentPasswordResetsByIP } from "../database/PasswordResetRepository";
+import { CreatePasswordReset, DeActivatePasswordReset, FindPasswordResetByHash, FindRecentPasswordResetsByIP } from "../database/PasswordResetRepository";
 import { PasswordResetCreate } from "../types/database/PasswordResetTable";
+import { GenerateRandomString } from "../lib/util/RandomString";
+import { SendPasswordResetEmail } from "../lib/email/PasswordResetEmail";
 
 const SALT_ROUNDS = 10;
 
@@ -123,7 +125,7 @@ export async function SignOut (req: Request, res: Response) {
     });
 }
 
-export async function ResetPassword (req: Request, res: Response) {
+export async function ResetPasswordRequest (req: Request, res: Response) {
     // Run validation.
     const errors = validationResult(req);
     // If we have validation errors, return them.
@@ -151,21 +153,88 @@ export async function ResetPassword (req: Request, res: Response) {
             return res.status(403).send("Too many requests.");
         }
 
+        const identifier = GenerateRandomString(5);
+
         const passwordReset: PasswordResetCreate = {
             email: email,
             ip: ip,
-            timestamp: moment().utc().format("YYYY-MM-DD HH:mm:ss")
+            timestamp: moment().utc().format("YYYY-MM-DD HH:mm:ss"),
+            hash: identifier
         }
         await CreatePasswordReset(passwordReset);
 
-        // const emailBody =
-        // `Hi ${user.first_name} ${user.last_name},
-        
-        // We've received a request to reset the password associated with this e-mail address for beschikbaarheid.online.
+        await SendPasswordResetEmail(email, identifier, user.first_name, user.last_name);
 
-        // If you didn't make this request yourself you can safely ignore it.`;
-        // SendEmail(AppConstants.Email.SendAddress, email, "Password reset", emailBody);
         return res.status(200).send("Ok.");
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Something went wrong, please try again later.");
+    }
+}
+
+export async function ResetPasswordPage (req: Request, res: Response) {
+    // Run validation.
+    const errors = validationResult(req);
+    // If we have validation errors, return them.
+    if (!errors.isEmpty()) {
+        return res.redirect("/404");
+    }
+
+    const id = req.params.id;
+
+    try {
+        const passwordResetRequest = await FindPasswordResetByHash(id);
+        if(!passwordResetRequest) {
+            return res.redirect("/404");
+        }
+
+        if(passwordResetRequest.active.valueOf() != 1) {
+            return res.redirect("/404");
+        }
+
+        return res.render("pages/auth/resetPassword",
+        {
+            hash: id
+        });
+    } catch (error) {
+        console.error(error);
+        return res.redirect("/503");
+    }
+}
+
+export async function ResetPassword (req: Request, res: Response) {
+    // Run validation.
+    const errors = validationResult(req);
+    // If we have validation errors, return them.
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const id = req.params.id;
+    const password = req.body.password;
+
+    try {
+        const passwordResetRequest = await FindPasswordResetByHash(id);
+        if(!passwordResetRequest) {
+            return res.redirect("/404");
+        }
+
+        if(passwordResetRequest.active.valueOf() != 1) {
+            return res.redirect("/404");
+        }
+
+        const user = await FindUserByEmail(passwordResetRequest.email);
+        if(!user) {
+            return res.redirect("/404");
+        }
+
+        const hashedPassword = await HashPassword(password);
+        const userUpdate: UserUpdate = {
+            password: hashedPassword
+        };
+        await UpdateUser(user.id, userUpdate);
+        await DeActivatePasswordReset(passwordResetRequest.id);
+        return res.status(201).send("Ok.");
     } catch (error) {
         console.error(error);
         return res.status(500).send("Something went wrong, please try again later.");

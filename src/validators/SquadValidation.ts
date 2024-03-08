@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { GetUserInSquad } from "../database/Squad_UserRepository";
-import { GetUserSession } from "../public/lib/auth/UserSession";
+import { GetUserSession } from "../lib/auth/UserSession";
 import { SquadRoleCoach, SquadRoleRower } from "../types/Squad";
 
 export async function CheckUserInSquad(req: Request, res: Response, next: NextFunction) {
