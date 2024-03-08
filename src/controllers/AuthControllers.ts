@@ -6,7 +6,7 @@ import { UserSession, UserMetadata } from '../types/User';
 import moment from 'moment';
 import { HasUserSession } from '../public/lib/auth/UserSession';
 import { GetUserSquads } from '../database/Squad_UserRepository';
-import { HashPassword, UserPasswordMatching } from "../lib/PasswordHashing";
+import { HashPassword, UserPasswordMatching } from "../lib/password/PasswordHashing";
 
 const SALT_ROUNDS = 10;
 
