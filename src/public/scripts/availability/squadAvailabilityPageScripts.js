@@ -27,6 +27,9 @@ function setHighlightedSlots (selectedUserIds) {
         const matchingAvailabilityEntry = embeddedAvailability.find(item => item.user_id == userId);
         if(matchingAvailabilityEntry) {
             jointAvailability = getIntersection(jointAvailability, matchingAvailabilityEntry.data);
+        } else {
+            jointAvailability = [];
+            break;
         }
     }
 
