@@ -25,7 +25,7 @@ async function submitForm (event) {
     const formData = new FormData(form);
     disableForm(form);
 
-    const clientValid = clientSideValidation(formData);
+    const clientValid = clientSideValidationEmail(formData);
     if(clientValid.length > 0)
     {
         displayErrorMessages(clientValid);
@@ -43,19 +43,13 @@ async function submitForm (event) {
     
     // Event listener for when the request completes.
     xhr.onload = function() {
-        if (xhr.status === 200) {
-            const params = new URLSearchParams(window.location.search);
-            if(params.has("target")) {
-                const redirect = params.get("target");
-                window.location.href = redirect;
-                return;
-            }
-            window.location.href = xhr.responseText;
+        if (xhr.status === 201) {
+            location.reload();
         }
         else {
             if(xhr.status == 500) {
                 const alert = createAlert("alertPlaceholder");
-                alert("Something went wrong. Please try again later.", 'danger');
+                alert("Something went wrong. Please try again later.", 'danger')
             } else {
                 const errorResponse = JSON.parse(xhr.responseText);
                 displayErrorMessages(errorResponse.errors);
@@ -68,7 +62,7 @@ async function submitForm (event) {
     xhr.onerror = function() {
         console.error('An error occurred while submitting the form.');
         const alert = createAlert("alertPlaceholder");
-        alert("Something went wrong. Please try again later.", 'danger');
+        alert("Something went wrong. Please try again later.", 'danger')
         enableForm(form);
     };
     
@@ -76,7 +70,59 @@ async function submitForm (event) {
     xhr.send(encodedFormData);
 }
 
-function clientSideValidation (formData, checkEmail)
+async function submitFormPassword (event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+    disableForm(form);
+
+    const clientValid = clientSideValidationPassword(formData);
+    if(clientValid.length > 0)
+    {
+        displayErrorMessages(clientValid);
+        enableForm(form);
+        return;
+    }
+
+    // Encode the form data.
+    const encodedFormData = new URLSearchParams(formData).toString();
+    const endpoint = form.action;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', endpoint);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    
+    // Event listener for when the request completes.
+    xhr.onload = function() {
+        if (xhr.status === 201) {
+            location.reload();
+        }
+        else {
+            if(xhr.status == 500) {
+                const alert = createAlert("alertPlaceholder");
+                alert("Something went wrong. Please try again later.", 'danger')
+            } else {
+                const errorResponse = JSON.parse(xhr.responseText);
+                displayErrorMessages(errorResponse.errors);
+            }
+            enableForm(form);
+        }
+    };
+    
+    // Event listener for when an error occurs.
+    xhr.onerror = function() {
+        console.error('An error occurred while submitting the form.');
+        const alert = createAlert("alertPlaceholder");
+        alert("Something went wrong. Please try again later.", 'danger')
+        enableForm(form);
+    };
+    
+    // Send the request with form data.
+    xhr.send(encodedFormData);
+}
+
+function clientSideValidationEmail (formData)
 {
     let errors = [];
 
@@ -92,26 +138,33 @@ function clientSideValidation (formData, checkEmail)
         }
     }
 
+    return errors;
+}
+
+function clientSideValidationPassword (formData)
+{
+    let errors = [];
+
     const password = formData.get("password");
-    if(!validatePassword(password))
+    if(password)
     {
-        errors.push({
-            msg: "Password must be at least 8 characters.",
-            path: "password"
-        });
+        if(!validatePassword(password))
+        {
+            errors.push({
+                msg: "Password must be at least 8 characters.",
+                path: "password"
+            });
+        }
     }
 
     return errors;
 }
 
+
 function validateEmail(email) {
     // Regular expression for validating email addresses
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
-}
-
-function validatePassword(password) {
-    return password.length >= 8;
 }
 
 function disableForm(form) {
@@ -146,4 +199,8 @@ function passwordConfirmMatching(event, element) {
     } else {
         displayErrorMessages([]);
     }
+}
+
+function validatePassword(password) {
+    return password.length >= 8;
 }

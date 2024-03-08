@@ -13,5 +13,10 @@ export default {
         NAME: process.env.DATABASE_NAME || "availability_db",
         USER: process.env.DATABASE_USER || "postgres",
         PASSWORD: process.env.DATABASE_PASSWORD || "Test123!",
+    },
+    EMAIL: {
+        HOST: process.env.EMAIL_HOST || "localhost",
+        USER: process.env.EMAIL_USER || "smtp",
+        PASSWORD: process.env.EMAIL_PASSWORD || "Test123!"
     }
 } as const;

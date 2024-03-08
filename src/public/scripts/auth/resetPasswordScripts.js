@@ -43,14 +43,8 @@ async function submitForm (event) {
     
     // Event listener for when the request completes.
     xhr.onload = function() {
-        if (xhr.status === 200) {
-            const params = new URLSearchParams(window.location.search);
-            if(params.has("target")) {
-                const redirect = params.get("target");
-                window.location.href = redirect;
-                return;
-            }
-            window.location.href = xhr.responseText;
+        if (xhr.status === 201) {
+            window.location.href = "/auth/signin";
         }
         else {
             if(xhr.status == 500) {
@@ -80,18 +74,6 @@ function clientSideValidation (formData, checkEmail)
 {
     let errors = [];
 
-    const email = formData.get("email");
-    if(email)
-    {
-        if(!validateEmail(email))
-        {
-            errors.push({
-                msg: "E-mail is not valid.",
-                path: "email"
-            });
-        }
-    }
-
     const password = formData.get("password");
     if(!validatePassword(password))
     {
@@ -102,12 +84,6 @@ function clientSideValidation (formData, checkEmail)
     }
 
     return errors;
-}
-
-function validateEmail(email) {
-    // Regular expression for validating email addresses
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
 }
 
 function validatePassword(password) {

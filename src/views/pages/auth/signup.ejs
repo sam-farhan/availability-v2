@@ -32,9 +32,16 @@
                                 </div>
                             </div>
                             <div class="form-group form-floating mb-2">
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required oninput="passwordConfirmMatching(event, this)">
                                 <label for="password">Password</label>
                                 <div id="password-feedback" class="invalid-feedback">
+                                    Invalid feedback.
+                                </div>
+                            </div>
+                            <div class="form-group form-floating mb-2">
+                                <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="Password" required oninput="passwordConfirmMatching(event, this)">
+                                <label for="passwordConfirm">Password (confirm)</label>
+                                <div id="passwordConfirm-feedback" class="invalid-feedback">
                                     Invalid feedback.
                                 </div>
                             </div>
