@@ -80,6 +80,10 @@ app.use(`/squad`, squadRoutes);
 // 404.
 app.use((req: express.Request, res: express.Response) => { 
     res.status(404).render("pages/errors/404");
+});
+// 503.
+app.get("/503", (req: express.Request, res: express.Response) => { 
+    res.render("pages/errors/503");
 }) 
 
 // Log environment variables.

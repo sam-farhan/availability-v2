@@ -127,3 +127,23 @@ function enableForm(form) {
         formElements[i].disabled = false;
     }
 }
+
+function passwordConfirmMatching(event, element) {
+    const form = element.closest('form');
+    const formData = new FormData(form);
+    const password = formData.get("password");
+    const passwordConfirm = formData.get("passwordConfirm");
+
+    if(!password || !passwordConfirm) return;
+
+    if(password != passwordConfirm) {
+        const errors = [{
+            msg: "Passwords do not match.",
+            path: "passwordConfirm"
+        }];
+        displayErrorMessages(errors);
+        return;
+    } else {
+        displayErrorMessages([]);
+    }
+}

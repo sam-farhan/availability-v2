@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { body } from 'express-validator';
-import { userEmailIsUnique, userPasswordIsValid } from '../validators/AuthValidation';
+import { userEmailIsUnique, userPasswordIsValid, validatePasswordMatch } from '../validators/AuthValidation';
 import { SignIn, SignOut, SignUp } from '../controllers/AuthControllers';
 import { CheckNoUserSession, RequireUserSession } from '../middleware/UserSessionMiddleware';
 
@@ -22,6 +22,7 @@ router.post("/signup", CheckNoUserSession,
     body('first_name').not().isEmpty().trim().escape(),
     body('last_name').not().isEmpty().trim().escape(),
     body('password').custom(userPasswordIsValid),
+    validatePasswordMatch,
     SignUp
 );
 
