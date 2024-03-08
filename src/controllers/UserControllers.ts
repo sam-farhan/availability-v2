@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import { UpdateUser } from '../database/UserRepository';
 import { UserSession } from '../types/User';
-import { HashPassword } from '../lib/PasswordHashing';
+import { HashPassword } from '../lib/password/PasswordHashing';
 
 export async function ChangeDetails (req: Request, res: Response) {
     // Run validation.
