@@ -163,7 +163,8 @@ export async function ResetPasswordRequest (req: Request, res: Response) {
         }
         await CreatePasswordReset(passwordReset);
 
-        await SendPasswordResetEmail(email, identifier, user.first_name, user.last_name);
+        const host = req.get('host') || "https://beschikbaarheid.online";
+        await SendPasswordResetEmail(email, identifier, user.first_name, user.last_name, host);
 
         return res.status(200).send("Ok.");
     } catch (error) {
