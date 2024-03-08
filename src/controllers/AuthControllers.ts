@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import { UserCreate, UserSelect, UserUpdate } from "../types/database/UserTable";
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
@@ -7,6 +6,7 @@ import { UserSession, UserMetadata } from '../types/User';
 import moment from 'moment';
 import { HasUserSession } from '../public/lib/auth/UserSession';
 import { GetUserSquads } from '../database/Squad_UserRepository';
+import { HashPassword, UserPasswordMatching } from "../lib/PasswordHashing";
 
 const SALT_ROUNDS = 10;
 
@@ -68,7 +68,7 @@ export async function SignIn (req: Request, res: Response) {
             }
             return res.status(401).json({ errors: [passwordMatchError] });
         }
-        if(await UserPasswordMatching(user, password))
+        if(await UserPasswordMatching(user.password, password))
         {
             const squads = await GetUserSquads(user.id);
 
@@ -117,22 +117,4 @@ export async function SignOut (req: Request, res: Response) {
         }
         res.status(200).redirect("/");
     });
-}
-
-async function UserPasswordMatching(user: UserSelect, passwordProvided: string): Promise<boolean> {
-    try {
-        return await bcrypt.compare(passwordProvided, user.password);
-    } catch (error) {
-        throw new Error('Could not compare password.');
-    }
-}
-
-async function HashPassword(password: string): Promise<string> {
-    try {
-        const salt = await bcrypt.genSalt(SALT_ROUNDS);
-        const hash = await bcrypt.hash(password, salt);
-        return hash;
-    } catch (error) {
-        throw new Error('Could not hash password.');
-    }
 }
