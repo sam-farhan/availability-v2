@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { body } from 'express-validator';
 import { userEmailIsUnique, userPasswordIsValid, validatePasswordMatch } from '../validators/AuthValidation';
-import { SignIn, SignOut, SignUp } from '../controllers/AuthControllers';
+import { ResetPassword, SignIn, SignOut, SignUp } from '../controllers/AuthControllers';
 import { CheckNoUserSession, RequireUserSession } from '../middleware/UserSessionMiddleware';
 
 const router = Router();
@@ -14,6 +14,11 @@ router.get('/signup', CheckNoUserSession, (req: Request, res: Response) => {
 // Signup page.
 router.get('/signin', CheckNoUserSession, (req: Request, res: Response) => {
     res.render("pages/auth/signin");
+});
+
+// Reset password page.
+router.get('/reset', CheckNoUserSession, (req: Request, res: Response) => {
+    res.render("pages/auth/reset");
 });
 
 // Signup post.
@@ -36,6 +41,12 @@ router.post("/signin", CheckNoUserSession,
 // Signout post.
 router.post("/signout", RequireUserSession,
     SignOut
+);
+
+// Reset post.
+router.post("/reset", CheckNoUserSession,
+    body('email').not().isEmpty().trim().escape(),
+    ResetPassword
 );
 
 export default router;

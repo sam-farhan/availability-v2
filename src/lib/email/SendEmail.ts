@@ -1,14 +1,16 @@
+import { MailOptions } from "nodemailer/lib/smtp-transport";
 import { EmailTransporter } from "./EmailTransporter";
 
-export async function SendEmail (from: string, recipient: string, subject: string, body: string) {
+export async function SendEmail (from: string, recipient: string, subject: string, body: string, htmlBody: string) {
     const transporter = EmailTransporter;
 
     // Define email options.
-    const mailOptions = {
+    const mailOptions: MailOptions = {
         from: from,
         to: recipient,
         subject: subject,
-        text: body
+        text: body,
+        html: htmlBody
     };
 
     // Send email.
