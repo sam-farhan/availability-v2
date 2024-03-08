@@ -6,6 +6,11 @@
         <%- include('../partials/header'); %>
         <main>
             <div class="container">
+                <div class="alert alert-warning" role="alert">
+                    <span class="badge bg-warning">Note</span>
+                    This is a <strong>pre-production</strong> service. This environment is purely for testing. Please continue to use the old version <a href="https://beschikbaarheid.online">https://beschikbaarheid.online</a>. Outages should be expected. 
+                </div>
+
                 <h1>Hi.</h1>
                 <h4 class="mb-4">Welcome to the new version of the availability app.</h4>
                 <strong>What's changed?</strong>
@@ -15,12 +20,7 @@
                     <li>Faster page loading times.</li>
                     <li>Infrastructure migrated to <a href="https://aws.amazon.com/">AWS</a>.</li>
                     <li>A bunch of unused features were removed.</li>
-                </ul>
-
-                <div class="alert alert-warning" role="alert">
-                    <span class="badge bg-warning">Note</span>
-                    This is a <strong>pre-production</strong> service. Outages should be expected.
-                </div>                  
+                </ul>      
             </div>
         </main>
 
