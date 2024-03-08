@@ -35,7 +35,7 @@
                     const rowers = squadUsers.filter(x => x.role == "Rower"); 
                     for(const rower of rowers) { 
                         var customClass = "";
-                        const match = usersMissingAvailability.find(u => u == coach.id);
+                        const match = usersMissingAvailability.find(u => u == rower.id);
                         if(match)
                             customClass = "missing";
                         %>
