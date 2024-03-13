@@ -10,6 +10,7 @@ import session from "express-session";
 import favicon from 'serve-favicon';
 import { AddMomentToLocals } from './middleware/MomentMiddleware';
 import { AddUserSessionToLocals } from './middleware/UserSessionMiddleware';
+import { CheckMaintenanceMode } from './middleware/MaintenanceModeMiddleware';
 
 // **** Variables **** //
 
@@ -67,6 +68,10 @@ app.use(AddMomentToLocals);
 
 // Include UserSession data in page locals.
 app.use(AddUserSessionToLocals);
+
+// If maintenance mode is enabled in environment vars,
+// then only ever render the maintenance page.
+app.use(CheckMaintenanceMode);
 
 // Set view engine to ejs.
 app.set("view engine", "ejs");
