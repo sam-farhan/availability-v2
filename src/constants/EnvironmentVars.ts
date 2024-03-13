@@ -1,7 +1,8 @@
 export default {
     ENVIRONMENT: process.env.ENV || "DEV",
     APP: {
-        PORT: process.env.PORT || 3000
+        PORT: process.env.PORT || 3000,
+        MAINTENANCE_MODE: ((process.env.MAINTENANCE_MODE?.trim() || "false") == "true"),
     },
     SESSION: {
         ACTIVE: process.env.USE_SESSION || true,
