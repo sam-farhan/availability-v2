@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { GetUserSession } from "../public/lib/auth/UserSession";
+import { GetUserSession } from "../lib/auth/UserSession";
 
 export function AddUserSessionToLocals (req: Request, res: Response, next: NextFunction) {
     const userSession = GetUserSession(req);
