@@ -10,7 +10,7 @@
     "test-coverage": "jest --coverage",
     "watch-server": "npx nodemon -e ts,js,ejs,json,css src/app.ts",
     "start": "ts-node dist/src/app.js",
-    "compile-scss": "sass src/public/style/custom.scss:src/public/style/custom_bootstrap.css",
+    "compile-scss": "sass --style compressed src/public/style/custom.scss:src/public/style/custom_bootstrap.css",
     "watch-scss": "sass --watch --style=compressed src/public/style/custom.scss:src/public/style/custom_bootstrap.css",
     "build": "npm run clean && npm run compile-scss && tsc",
     "postbuild": "copyfiles -u 1 src/**/*.{ejs,css,css.map,ico,js} dist/src/"
